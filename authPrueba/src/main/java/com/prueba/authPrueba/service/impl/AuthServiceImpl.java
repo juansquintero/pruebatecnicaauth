@@ -28,10 +28,8 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public LoginResponse login(LoginRequest loginRequest) {
-        // Call DummyJSON API to authenticate
         LoginResponse response = dummyJsonClient.login(loginRequest);
         
-        // Log successful login
         if (response != null && response.getAccessToken() != null) {
             LoginLog loginLog = new LoginLog(
                     loginRequest.getUsername(),
@@ -46,16 +44,13 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public UserDto getAuthenticatedUser(String token) {
-        // Format token as cookie
         String cookie = "accessToken=" + token;
         
-        // Call DummyJSON API to get authenticated user
         return dummyJsonClient.getAuthenticatedUser(cookie);
     }
     
     @Override
     public UserDto getAuthenticatedUserByUsername(String username) {
-        // Find the most recent login for this username
         List<LoginLog> loginLogs = loginLogRepository.findByUsername(
                 username, 
                 PageRequest.of(0, 1, Sort.by(Sort.Direction.DESC, "loginTime"))
@@ -65,10 +60,8 @@ public class AuthServiceImpl implements AuthService {
             throw new RuntimeException("No login found for username: " + username);
         }
         
-        // Get the access token from the most recent login
         String accessToken = loginLogs.get(0).getAccessToken();
         
-        // Use the token to get the authenticated user
         return getAuthenticatedUser(accessToken);
     }
 } 

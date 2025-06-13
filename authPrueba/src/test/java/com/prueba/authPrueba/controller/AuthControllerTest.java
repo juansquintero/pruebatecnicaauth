@@ -32,7 +32,6 @@ public class AuthControllerTest {
 
     @Test
     void testLoginWithEmilysCredentials() throws Exception {
-        // Arrange
         LoginResponse mockResponse = new LoginResponse();
         mockResponse.setId(1);
         mockResponse.setUsername("emilys");
@@ -42,7 +41,6 @@ public class AuthControllerTest {
 
         when(authService.login(any(LoginRequest.class))).thenReturn(mockResponse);
 
-        // Act & Assert
         mockMvc.perform(post("/api/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"username\":\"emilys\",\"password\":\"emilyspass\"}"))
@@ -54,7 +52,6 @@ public class AuthControllerTest {
 
     @Test
     void testGetAuthenticatedUser() throws Exception {
-        // Arrange
         UserDto mockUser = new UserDto();
         mockUser.setId(1);
         mockUser.setUsername("emilys");
@@ -64,7 +61,6 @@ public class AuthControllerTest {
 
         when(authService.getAuthenticatedUser(any(String.class))).thenReturn(mockUser);
 
-        // Act & Assert
         mockMvc.perform(get("/api/auth/me")
                 .header("Authorization", "mock-access-token-for-emilys"))
                 .andExpect(status().isOk())

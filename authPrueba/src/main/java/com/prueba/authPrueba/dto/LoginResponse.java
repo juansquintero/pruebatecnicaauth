@@ -86,7 +86,6 @@ public class LoginResponse {
         this.refreshToken = refreshToken;
     }
 
-    // For backward compatibility with existing code
     public String getToken() {
         return accessToken;
     }

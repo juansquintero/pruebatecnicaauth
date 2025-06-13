@@ -48,7 +48,6 @@ class AuthServiceTest {
 
     @Test
     void testSuccessfulLogin() {
-        // Arrange
         LoginRequest loginRequest = new LoginRequest("emilys", "emilyspass");
         LoginResponse mockResponse = new LoginResponse();
         mockResponse.setId(1);
@@ -58,15 +57,12 @@ class AuthServiceTest {
 
         when(dummyJsonClient.login(any(LoginRequest.class))).thenReturn(mockResponse);
 
-        // Act
         LoginResponse result = authService.login(loginRequest);
 
-        // Assert
         assertEquals("emilys", result.getUsername());
         assertEquals("mock-access-token", result.getAccessToken());
         assertEquals("mock-refresh-token", result.getRefreshToken());
 
-        // Verify login was logged
         verify(loginLogRepository).save(loginLogCaptor.capture());
         LoginLog capturedLog = loginLogCaptor.getValue();
         assertEquals("emilys", capturedLog.getUsername());
@@ -91,7 +87,6 @@ class AuthServiceIntegrationTest {
 
     @Test
     void testLoginSavesToDatabase() {
-        // Arrange
         LoginRequest loginRequest = new LoginRequest("testuser", "password123");
         LoginResponse mockResponse = new LoginResponse();
         mockResponse.setId(1);
@@ -101,16 +96,12 @@ class AuthServiceIntegrationTest {
 
         when(dummyJsonClient.login(any(LoginRequest.class))).thenReturn(mockResponse);
 
-        // Clear any existing logs
         loginLogRepository.deleteAll();
 
-        // Act
         LoginResponse result = authService.login(loginRequest);
 
-        // Assert
         assertEquals("testuser", result.getUsername());
         
-        // Verify data was saved to database
         List<LoginLog> logs = loginLogRepository.findAll();
         assertEquals(1, logs.size());
         
