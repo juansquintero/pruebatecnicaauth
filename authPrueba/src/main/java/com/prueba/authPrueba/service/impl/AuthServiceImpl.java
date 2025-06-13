@@ -71,43 +71,4 @@ public class AuthServiceImpl implements AuthService {
         // Use the token to get the authenticated user
         return getAuthenticatedUser(accessToken);
     }
-    
-    @Override
-    public LoginResponse refreshToken(String username) {
-        // Find the most recent login for this username
-        List<LoginLog> loginLogs = loginLogRepository.findByUsername(
-                username,
-                PageRequest.of(0, 1, Sort.by(Sort.Direction.DESC, "loginTime"))
-        );
-        
-        if (loginLogs.isEmpty()) {
-            throw new RuntimeException("No login found for username: " + username);
-        }
-        
-        LoginLog loginLog = loginLogs.get(0);
-        
-        // Get the refresh token from the most recent login
-        String refreshToken = loginLog.getRefreshToken();
-        if (refreshToken == null) {
-            throw new RuntimeException("No refresh token available for username: " + username);
-        }
-        
-        // Format refresh token as cookie
-        String refreshTokenCookie = "refreshToken=" + refreshToken;
-        
-        // Call DummyJSON API to refresh the token
-        LoginResponse response = dummyJsonClient.refreshToken(refreshTokenCookie);
-        
-        // Update the login log with the new tokens
-        if (response != null && response.getAccessToken() != null) {
-            LoginLog newLoginLog = new LoginLog(
-                    username,
-                    response.getAccessToken(),
-                    response.getRefreshToken()
-            );
-            loginLogRepository.save(newLoginLog);
-        }
-        
-        return response;
-    }
 } 

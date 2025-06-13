@@ -8,5 +8,4 @@ public interface AuthService {
     LoginResponse login(LoginRequest loginRequest);
     UserDto getAuthenticatedUser(String token);
     UserDto getAuthenticatedUserByUsername(String username);
-    LoginResponse refreshToken(String username);
 } 
