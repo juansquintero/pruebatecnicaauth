@@ -21,6 +21,9 @@ public interface DummyJsonClient {
     @GetMapping("/auth/me")
     UserDto getAuthenticatedUser(@RequestHeader("Cookie") String cookie);
 
+    @PostMapping("/auth/refresh-token")
+    LoginResponse refreshToken(@RequestHeader("Cookie") String refreshTokenCookie);
+
     @GetMapping("/users")
     Map<String, List<UserDto>> getUsers();
 } 

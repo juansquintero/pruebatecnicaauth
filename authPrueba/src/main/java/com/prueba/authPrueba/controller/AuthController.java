@@ -30,4 +30,16 @@ public class AuthController {
         UserDto user = authService.getAuthenticatedUser(token);
         return ResponseEntity.ok(user);
     }
+    
+    @GetMapping("/me/{username}")
+    public ResponseEntity<UserDto> getAuthenticatedUserByUsername(@PathVariable String username) {
+        UserDto user = authService.getAuthenticatedUserByUsername(username);
+        return ResponseEntity.ok(user);
+    }
+    
+    @PostMapping("/refresh/{username}")
+    public ResponseEntity<LoginResponse> refreshToken(@PathVariable String username) {
+        LoginResponse response = authService.refreshToken(username);
+        return ResponseEntity.ok(response);
+    }
 } 
